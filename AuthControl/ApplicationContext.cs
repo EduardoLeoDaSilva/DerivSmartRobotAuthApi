@@ -1,6 +1,7 @@
 ﻿using AuthControl.Entities;
 using AuthControl.Models;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace AuthControl
 {
@@ -44,6 +45,18 @@ namespace AuthControl
 
 
                 x.Property(m => m.Password).IsRequired(true);
+            });
+
+
+            modelBuilder.Entity<Plans>(x =>
+            {
+                x.ToTable("plans");
+                x.HasKey(m => m.Id);
+                x.Property(m => m.Name).IsRequired(true).HasMaxLength(100);
+                x.Property(s => s.Robots)
+                    .HasConversion(v => JsonConvert.SerializeObject(v, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }),
+                        v => JsonConvert.DeserializeObject<List<string>>(v, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }))
+                    .HasColumnName("Robots");
             });
         }
     }

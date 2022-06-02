@@ -1,26 +1,20 @@
-﻿namespace AuthControl.Entities
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace AuthControl.Entities
 {
     public class Plans
     {
-        public static List<string> GetRobotsBaseOnPlan(string planName)
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+
+        public List<string> Robots { get; set; }
+
+        public static List<string> GetRobotsBaseOnPlan(string planName, ApplicationContext context)
         {
 
+            var plans = context.Set<Plans>().FirstOrDefault(x => x.Name == planName);
 
-            if (planName == "Completo")
-            {
-                return new List<string> {"1", "2", "3", "4", "5", "6", "7"};
-            }else if (planName == "Inicial")
-            {
-                return new List<string> { "2", "3"};
-            }
-            else if (planName == "Intermediário")
-            {
-                return new List<string> {"4", "5", "6", "7"};
-            }
-            else
-            {
-                return new List<string> { "2", "3" };
-            }
+            return plans.Robots;
 
         }
     }

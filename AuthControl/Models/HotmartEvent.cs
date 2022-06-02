@@ -6,6 +6,10 @@ namespace AuthControl.Models
     // RootChangePlan myDeserializedClass = JsonConvert.DeserializeObject<RootChangePlan>(myJsonResponse);
     public class Product
     {
+        public Product()
+        {
+            
+        }
         [JsonProperty("id")]
         public int Id { get; set; }
 
@@ -18,24 +22,40 @@ namespace AuthControl.Models
 
     public class Affiliate
     {
+        public Affiliate()
+        {
+            
+        }
         [JsonProperty("name")]
         public string Name { get; set; }
     }
 
     public class Buyer
     {
+        public Buyer()
+        {
+            
+        }
         [JsonProperty("email")]
         public string Email { get; set; }
     }
 
     public class Producer
     {
+        public Producer()
+        {
+            
+        }
         [JsonProperty("name")]
         public string Name{ get; set; }
 }
 
     public class Commission
     {
+        public Commission()
+        {
+            
+        }
         [JsonProperty("value")]
         public double Value { get; set; }
 
@@ -45,12 +65,20 @@ namespace AuthControl.Models
 
     public class FullPrice
     {
+        public FullPrice()
+        {
+            
+        }
         [JsonProperty("value")]
         public decimal Value { get; set; }
     }
 
     public class OriginalOfferPrice
     {
+        public OriginalOfferPrice()
+        {
+            
+        }
         [JsonProperty("currency_value")]
         public string CurrencyValue { get; set; }
 
@@ -60,12 +88,20 @@ namespace AuthControl.Models
 
     public class Price
     {
+        public Price()
+        {
+            
+        }
         [JsonProperty("value")]
         public double Value { get; set; }
     }
 
     public class Payment
     {
+        public Payment()
+        {
+            
+        }
         [JsonProperty("billet_barcode")]
         public string? BilletBarcode { get; set; }
 
@@ -99,6 +135,10 @@ namespace AuthControl.Models
     }
     public class Purchase
     {
+        public Purchase()
+        {
+            
+        }
         [JsonProperty("approved_date")]
         public long ApprovedDate { get; set; }
 
@@ -127,48 +167,73 @@ namespace AuthControl.Models
 
     public class Subscriber
     {
+        public Subscriber()
+        {
+            
+        }
         [JsonProperty("code")]
-        public string Code { get; set; }
+        public string? Code { get; set; }
+        
+        [JsonProperty("email")]
+        public string? Email { get; set; }
+
+        [JsonProperty("name")]
+        public string? Name { get; set; }
     }
 
     public class Subscription
     {
+        public Subscription()
+        {
+            
+        }
         [JsonProperty("status")]
-        public string Status { get; set; }
+        public string? Status { get; set; }
 
         [JsonProperty("plan")]
-        public Plan Plan{ get; set; }
+        public Plan? Plan{ get; set; }
 
     [JsonProperty("subscriber")]
-        public Subscriber Subscriber { get; set; }
+        public Subscriber? Subscriber { get; set; }
     }
 
     public class Data
     {
+        public Data()
+        {
+            
+        }
         [JsonProperty("product")]
-        public Product Product { get; set; }
+        public Product? Product { get; set; }
 
         [JsonProperty("affiliates")]
-        public List<Affiliate> Affiliates { get; set; }
+        public List<Affiliate>? Affiliates { get; set; }
 
         [JsonProperty("buyer")]
-        public Buyer Buyer { get; set; }
+        public Buyer? Buyer { get; set; }
 
         [JsonProperty("producer")]
-        public Producer Producer { get; set; }
+        public Producer? Producer { get; set; }
 
         [JsonProperty("commissions")]
-        public List<Commission> Commissions { get; set; }
+        public List<Commission>? Commissions { get; set; }
 
         [JsonProperty("purchase")]
-        public Purchase Purchase { get; set; }
+        public Purchase? Purchase { get; set; }
 
         [JsonProperty("subscription")]
-        public Subscription Subscription { get; set; }
+        public Subscription? Subscription { get; set; }
+
+        public Subscriber? Subscriber { get; set; }
     }
 
     public class OrderEvent
     {
+        public OrderEvent()
+        {
+            
+        }
+
         [JsonProperty("id")]
         public string Id { get; set; }
 

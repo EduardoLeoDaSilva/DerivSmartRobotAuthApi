@@ -26,7 +26,7 @@ namespace AuthControl.Services
 
             if (user != null)
             {
-                user.Robots = string.Join(';', Plans.GetRobotsBaseOnPlan(order.Data.Subscription.Plan.Name)); //todo 
+                user.Robots = string.Join(';', Plans.GetRobotsBaseOnPlan(order.Data.Subscription.Plan.Name, _context)); //todo 
 
                 _context.User.Update(user);
 
@@ -42,7 +42,7 @@ namespace AuthControl.Services
                 Id = Guid.NewGuid(),
                 Email = order.Data.Buyer.Email,
                 Password = new EncriptionService().Encript(password),
-                Robots = string.Join(';', Plans.GetRobotsBaseOnPlan(order.Data.Subscription.Plan.Name)),
+                Robots = string.Join(';', Plans.GetRobotsBaseOnPlan(order.Data.Subscription.Plan.Name, _context)),
                 Active = true
             };
 
@@ -79,7 +79,13 @@ namespace AuthControl.Services
             if (order == null)
                 return;
 
-            var user = await _context.User.FirstOrDefaultAsync(x => x.Email == order.Data.Buyer.Email);
+            var user = await _context.User.FirstOrDefaultAsync(x => x.Email == order.Data.Subscriber.Email);
+
+            if (user == null)
+                return;
+
+            user.Robots = string.Empty;
+
 
             if (user != null)
             {
@@ -104,7 +110,6 @@ namespace AuthControl.Services
 
             var changedPlan = order.Data.Plans.FirstOrDefault(x => x.Current == true);
 
-
             var user = await _context.User.FirstOrDefaultAsync(x => x.Email == order.Data.Subscription.User.Email);
 
             if (user != null)
@@ -112,7 +117,9 @@ namespace AuthControl.Services
 
                 user.Active = true;
 
-                user.Robots = string.Join(';', Plans.GetRobotsBaseOnPlan(changedPlan.Name));//todo
+                user.Robots = string.Empty;
+
+                user.Robots = string.Join(';', Plans.GetRobotsBaseOnPlan(changedPlan.Name, _context));//todo
 
                 _context.User.Update(user);
 

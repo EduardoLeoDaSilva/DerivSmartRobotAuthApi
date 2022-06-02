@@ -47,18 +47,16 @@ namespace AuthControl.Controllers
 
         /// <returns></returns>
         [HttpPost("NotifyCanceled")]
-        public async Task<IActionResult> NotifyCanceled([FromQuery] OrderEvent order)
+        public async Task<IActionResult> NotifyCanceled([FromBody] OrderEvent order)
         {
             try
             {
 
-                if (order.Data.Subscription.Status == "ACTIVE" && order.Data.Subscription.Status == "STARTED" && order.Data.Subscription.Status == "OVERDUE")
-                {
 
                     await _service.ProcessOrderCanceledEstornedEvent(order);
 
 
-                }
+                
                 return Ok();
 
             }
