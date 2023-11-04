@@ -60,6 +60,7 @@ namespace AuthControl.Services
 
         }
 
+
         public async Task<bool> ResendEmail()
         {
 

@@ -29,6 +29,8 @@ builder.Services.AddTransient<EmailService>();
 builder.Services.AddTransient<HotmartService>();
 builder.Services.AddTransient<UserService>();
 builder.Services.AddScoped<DerivClient>();
+builder.Services.AddCors();
+
 builder.Services.AddLogging();
 builder.Services.AddSendGrid(x =>
 {
@@ -69,7 +71,12 @@ builder.Services.AddMvc();
 
 var app = builder.Build();
 
-
+app.UseCors(option =>
+{
+    option.AllowAnyOrigin();
+    option.AllowAnyHeader();
+    option.AllowAnyMethod();
+}); ;
 
 // Configure the HTTP request pipeline.
 

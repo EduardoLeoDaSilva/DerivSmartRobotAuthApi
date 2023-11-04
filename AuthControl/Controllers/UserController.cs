@@ -1,8 +1,10 @@
 ﻿using AuthControl.Entities;
+using AuthControl.Models.Response;
 using AuthControl.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace AuthControl.Controllers
 {
@@ -12,10 +14,12 @@ namespace AuthControl.Controllers
     {
         private readonly UserService _service;
         private readonly IConfiguration _configuration;
-        public UserController(UserService service, IConfiguration configuration)
+        private readonly ApplicationContext _context;
+        public UserController(UserService service, IConfiguration configuration, ApplicationContext context)
         {
             _service = service;
             _configuration = configuration;
+            _context = context;
         }
 
         /// <returns></returns>
@@ -31,11 +35,11 @@ namespace AuthControl.Controllers
                 {
                     var token =TokenService.GenerateToken(userDb, secreetkey);
                     userDb.JwtToken = token;
-                    return Ok(userDb);
+                    return Ok(new BaseResponse<UserBase> { Data = userDb, Success = true, Errors = new List<string>() }) ;
 
                 }
-
-                return BadRequest("Usuário não encontrado");
+                var response = new BaseResponse<UserBase> { Data = null, Success = false, Errors = new List<string> { "Usuário não encontrado" } };
+                return BadRequest(response);
             }
             catch (Exception e)
             {
@@ -120,7 +124,35 @@ namespace AuthControl.Controllers
         }
 
 
-        
+        [HttpGet("Robots")]
+        [Authorize]
+        public async Task<IActionResult> GetRobots()
+        {
+            try
+            {
+                var robots = await _context.Robots.ToListAsync();
+
+                if (robots != null)
+                {
+                    return Ok(new BaseResponse<List<Robots>> { Data = robots, Success = true, Errors = new List<string>() });
+                }
+                else
+                {
+                    return Ok(new BaseResponse<List<Robots>> { Data = null, Success = false, Errors = new List<string> { "Erro ao tentar obter robôs" } });
+
+                }
+
+
+            }
+            catch (Exception e)
+            {
+                return Ok(new BaseResponse<List<Robots>> { Data = null, Success = false, Errors = new List<string> { "Erro interno ao tentar obter robôs, contate o administrador" } });
+
+            }
+        }
+
+
+
 
         /// <returns></returns>
         [HttpGet("OAuthData")]
@@ -133,15 +165,28 @@ namespace AuthControl.Controllers
 
                 if (userDb != null)
                 {
-                    return Ok(userDb);
+
+                    if( userDb.TokenDateDeadLine > DateTime.Now)
+                    {
+                        return Ok(new BaseResponse<UserBase> { Data = userDb, Success = true, Errors = new List<string>() });
+
+                    }
+                    else
+                    {
+                        return Ok(new BaseResponse<UserBase> { Data = null, Success = false, Errors = new List<string> { "OAuth Expirado" } });
+
+                    }
 
                 }
 
-                return BadRequest("Usuário não encontrado");
+                    var response = new BaseResponse<UserBase> { Data = null, Success = false, Errors = new List<string> { "Usuário não encontrado" } };
+                return Ok(response);
+                
+
             }
             catch (Exception e)
             {
-                return StatusCode(500);
+                return BadRequest(new BaseResponse<UserBase> { Data = null, Success = false, Errors = new List<string> { "Ocorreu um erro interno, contate o administrador"} });
             }
         }
 

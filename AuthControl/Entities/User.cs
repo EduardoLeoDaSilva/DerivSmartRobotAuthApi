@@ -6,6 +6,8 @@ namespace AuthControl.Entities
     public class UserBase
     {
         public Guid Id { get; set; }
+
+        public string Name { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
         public string Robots { get; set; }
@@ -16,6 +18,8 @@ namespace AuthControl.Entities
         
         [NotMapped]
         public string JwtToken { get; set; }
+
+        public List<OperationaDay> OperationsDays { get; set; }
 
     }
 
